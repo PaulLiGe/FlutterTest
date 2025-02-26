@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'dart:convert';
-
 import 'package:test01/pages/home_model.dart';
 
-class HomeViewModel {
-  static Future<List<BannerItemData>?> getBanner() async {
+class HomeViewModel with ChangeNotifier {
+  List<BannerItemData>? bannerList;
+
+  Future getBanner() async {
     Dio dio = Dio();
     dio.options = BaseOptions(
         method: "Get",
@@ -19,8 +21,10 @@ class HomeViewModel {
     print(standardJson);
     HomeBannerModel model = HomeBannerModel.fromJson(response.data);
     if (model.data != null) {
-      return model.data;
+      bannerList = model.data;
+    } else {
+      bannerList = [];
     }
-    return [];
+    notifyListeners();
   }
 }

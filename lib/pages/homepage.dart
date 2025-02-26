@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+import 'package:provider/provider.dart';
 import 'package:test01/pages/home_model.dart';
 import 'package:test01/pages/home_view_model.dart';
 import 'package:test01/pages/web_page.dart';
@@ -13,41 +14,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<BannerItemData>? bannerList;
+  HomeViewModel viewModel = HomeViewModel();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initBannerData();
+    viewModel.getBanner();
+    // initBannerData();
   }
 
-  void initBannerData() async {
-    bannerList = await HomeViewModel.getBanner();
-    setState(() {});
-  }
+  // void initBannerData() async {
+  //   bannerList = await HomeViewModel.getBanner();
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('顶部nav'),
-      ),
-      body: Container(
-        // color: Colors.gr,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _banner(),
-              ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, idx) {
-                  return _listItemView();
-                },
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 100,
-              ),
-            ],
+    return ChangeNotifierProvider<HomeViewModel>(
+      create: (context) {
+        return viewModel;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('顶部nav'),
+        ),
+        body: Container(
+          // color: Colors.gr,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _banner(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, idx) {
+                    return _listItemView();
+                  },
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 100,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -55,27 +62,31 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _banner() {
-    return Container(
-      width: double.infinity,
-      height: 150,
-      child: Swiper(
-        indicatorLayout: PageIndicatorLayout.COLOR,
-        pagination: SwiperPagination(),
-        control: SwiperControl(),
-        autoplay: true,
-        itemCount: bannerList?.length ?? 0,
-        itemBuilder: (context, idxd) {
-          return Container(
-            width: double.infinity,
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            color: Colors.lightBlue,
-            child: Image.network(
-              bannerList?[idxd].imagePath ?? "",
-              fit: BoxFit.fill,
-            ),
-          );
-        },
-      ),
+    return Consumer<HomeViewModel>(
+      builder: (context, vm, child) {
+        return Container(
+          width: double.infinity,
+          height: 150,
+          child: Swiper(
+            indicatorLayout: PageIndicatorLayout.COLOR,
+            pagination: SwiperPagination(),
+            control: SwiperControl(),
+            autoplay: true,
+            itemCount: vm.bannerList?.length ?? 0,
+            itemBuilder: (context, idxd) {
+              return Container(
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                color: Colors.lightBlue,
+                child: Image.network(
+                  vm.bannerList?[idxd].imagePath ?? "",
+                  fit: BoxFit.fill,
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 

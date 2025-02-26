@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage1(),
+      home: HomePage(),
       // onGenerateRoute: Routes.generatedRoute,
       // initialRoute: RoutePath.home,
     );
