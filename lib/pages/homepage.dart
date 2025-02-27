@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     viewModel.getBanner();
+    viewModel.getHomeList();
     // initBannerData();
   }
 
@@ -45,14 +46,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 _banner(),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, idx) {
-                    return _listItemView();
-                  },
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 100,
-                ),
+                _listView(),
               ],
             ),
           ),
@@ -61,9 +55,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _listView() {
+    return Consumer<HomeViewModel>(builder: (context, vm, child) {
+      print('_listView刷新了');
+      return ListView.builder(
+        itemCount: vm.listDatas?.length ?? 0,
+        itemBuilder: (context, index) {
+          return _listItemView(index);
+        },
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+      );
+    });
+  }
+
   Widget _banner() {
     return Consumer<HomeViewModel>(
       builder: (context, vm, child) {
+        print('banner刷新');
+
         return Container(
           width: double.infinity,
           height: 150,
@@ -90,7 +100,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _listItemView() {
+  Widget _listItemView(int index) {
+    var name;
+    if (viewModel.listDatas?[index].author?.isNotEmpty == true) {
+      name = viewModel.listDatas?[index].author ?? "";
+    } else {
+      print('为空了');
+      name = viewModel.listDatas?[index].shareUser ?? "";
+    }
     return GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, RoutePath.webViewPage);
@@ -109,6 +126,7 @@ class _HomePageState extends State<HomePage> {
         margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -125,12 +143,12 @@ class _HomePageState extends State<HomePage> {
                   width: 15,
                 ),
                 Text(
-                  '作者',
+                  name,
                   style: TextStyle(color: Colors.black),
                 ),
                 Expanded(child: SizedBox()),
                 Text(
-                  '2024-12-12 12:12',
+                  viewModel.listDatas?[index].niceDate ?? "",
                   style: TextStyle(color: Colors.blue),
                 ),
                 Text(
@@ -142,11 +160,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Text("测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试"),
+            Text(
+              viewModel.listDatas?[index].title ?? "",
+              textAlign: TextAlign.left,
+            ),
             Row(
               children: [
                 Text(
-                  '分类',
+                  viewModel.listDatas?[index].chapterName ?? "",
                   style: TextStyle(fontSize: 14, color: Colors.green),
                 ),
                 Expanded(child: SizedBox()),
