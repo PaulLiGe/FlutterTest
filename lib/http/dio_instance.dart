@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:test01/http/response_interceptor.dart';
 import './http_method.dart';
+import './print_interceptor.dart';
+import './response_interceptor.dart';
 
 class DioInstance {
   static DioInstance? _instance;
@@ -21,6 +24,8 @@ class DioInstance {
   }) {
     _dio.options = BaseOptions(
         method: httpMethod, baseUrl: baseUrl, connectTimeout: connectTime);
+    _dio.interceptors.add(PrintInterceptor());
+    _dio.interceptors.add(ResponseInterceptor());
   }
 
   Future<Response> get(

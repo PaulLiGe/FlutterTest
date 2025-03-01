@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:test01/http/dio_instance.dart';
@@ -11,12 +13,11 @@ class HomeViewModel with ChangeNotifier {
 
   Future getBanner() async {
     Response response = await DioInstance.instance().get(path: "banner/json");
-    String standardJson = json.encode(response.data);
-    print('沃日');
-    print(standardJson);
-    HomeBannerModel model = HomeBannerModel.fromJson(response.data);
-    if (model.data != null) {
-      bannerList = model.data;
+    dynamic responseData = response.data;
+    print('运行时类型${responseData.runtimeType} $responseData');
+    if (responseData is List) {
+      bannerList =
+          responseData.map((item) => BannerItemData.fromJson(item)).toList();
     } else {
       bannerList = [];
     }
@@ -26,15 +27,9 @@ class HomeViewModel with ChangeNotifier {
   Future getHomeList() async {
     Response response =
         await DioInstance.instance().get(path: 'article/list/1/json');
-    String standardJson = json.encode(response.data);
-    print(standardJson);
-
-    HomeListData listData = HomeListData.fromJson(response.data);
-    if (listData.data != null && listData.data?.datas != null) {
-      listDatas = listData.data?.datas;
-    } else {
-      listDatas = [];
-    }
+    dynamic responseData = response.data;
+    Data data = Data.fromJson(responseData);
+    listDatas = data.datas;
     notifyListeners();
   }
 }
