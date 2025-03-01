@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:test01/http/dio_instance.dart';
 import 'dart:convert';
 import 'package:test01/pages/home_model.dart';
 import 'home_list_data.dart';
@@ -9,15 +10,7 @@ class HomeViewModel with ChangeNotifier {
   List<Datas>? listDatas;
 
   Future getBanner() async {
-    Dio dio = Dio();
-    dio.options = BaseOptions(
-        method: "Get",
-        baseUrl: "https://www.wanandroid.com/",
-        connectTimeout: Duration(seconds: 30),
-        receiveTimeout: Duration(seconds: 30),
-        sendTimeout: Duration(seconds: 30));
-
-    Response response = await dio.get("banner/json");
+    Response response = await DioInstance.instance().get(path: "banner/json");
     String standardJson = json.encode(response.data);
     print('沃日');
     print(standardJson);
@@ -31,11 +24,8 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future getHomeList() async {
-    Dio dio = Dio();
-    dio.options.baseUrl = "https://www.wanandroid.com/";
-    dio.options.method = "GET";
-
-    Response response = await dio.get('article/list/1/json');
+    Response response =
+        await DioInstance.instance().get(path: 'article/list/1/json');
     String standardJson = json.encode(response.data);
     print(standardJson);
 

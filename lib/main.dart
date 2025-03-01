@@ -7,11 +7,13 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
+import 'package:test01/http/dio_instance.dart';
 import 'package:test01/pages/homepage.dart';
 import 'package:test01/routes/routes.dart';
 import 'package:test01/pages/home_page_1.dart';
 
 void main() {
+  DioInstance.instance().initDio();
   runApp(const MyApp());
 }
 
