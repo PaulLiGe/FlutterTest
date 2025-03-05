@@ -4,11 +4,11 @@ class ResponseBaseModel<T> {
   String? errorMsg;
 
   ResponseBaseModel.fromJson(dynamic json) {
-    // if (T == List<Map<String, dynamic>>) {
-    //   data = (json["data"] as List).cast<Map<String, dynamic>>() as T;
-    // } else {
-    data = json["data"];
-    // }
+    if (T == List<Map<String, dynamic>>) {
+      data = (json["data"] as List).cast<Map<String, dynamic>>() as T;
+    } else {
+      data = json["data"];
+    }
     errorCode = json["errorCode"];
     errorMsg = json["errorMsg"];
   }

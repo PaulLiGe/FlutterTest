@@ -323,3 +323,16 @@ class Datas {
     return _data;
   }
 }
+
+class HomeTopListData {
+  List<Datas> topList = [];
+
+  HomeTopListData.fromJson(dynamic json) {
+    if (json is List) {
+      json.forEach((item) {
+        Datas model = Datas.fromJson(item);
+        topList.add(model);
+      });
+    }
+  }
+}

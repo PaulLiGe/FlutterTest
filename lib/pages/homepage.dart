@@ -5,6 +5,7 @@ import 'package:test01/pages/home_model.dart';
 import 'package:test01/pages/home_view_model.dart';
 import 'package:test01/pages/web_page.dart';
 import 'package:test01/routes/routes.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     viewModel.getBanner();
-    viewModel.getHomeList();
+    viewModel.getListData(false);
     // initBannerData();
   }
 
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   //   bannerList = await HomeViewModel.getBanner();
   //   setState(() {});
   // }
-
+  final smcontroller = RefreshController();
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeViewModel>(
@@ -42,12 +43,31 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Container(
           // color: Colors.gr,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _banner(),
-                _listView(),
-              ],
+          child: SmartRefresher(
+            controller: smcontroller,
+            enablePullDown: true,
+            enablePullUp: true,
+            header: ClassicHeader(),
+            footer: ClassicFooter(),
+            onLoading: () {
+              viewModel.getListData(true).then((onValue) {
+                smcontroller.loadComplete();
+              });
+            },
+            onRefresh: () {
+              viewModel.getBanner().then((value) {
+                viewModel.getListData(false).then((value) {
+                  smcontroller.refreshCompleted();
+                });
+              });
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _banner(),
+                  _listView(),
+                ],
+              ),
             ),
           ),
         ),
