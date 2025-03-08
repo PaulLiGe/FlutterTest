@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:test01/http/dio_instance.dart';
 import 'package:test01/pages/homepage.dart';
+import 'package:test01/pages/tab_page.dart';
 import 'package:test01/routes/routes.dart';
 import 'package:test01/pages/home_page_1.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: TabPage(),
       // onGenerateRoute: Routes.generatedRoute,
       // initialRoute: RoutePath.home,
     );
