@@ -1,8 +1,11 @@
+import 'package:test01/http/http_method.dart';
 import 'package:test01/pages/home_list_data.dart';
 import 'package:test01/pages/home_model.dart';
-
+import 'package:test01/pages/hot_key/hot_key_model.dart';
+import '../pages/hot_key/hot_friend.model.dart';
 import '../http/dio_instance.dart';
 import 'package:dio/dio.dart';
+import 'dart:developer';
 
 class Api {
   static Api? _instance;
@@ -41,5 +44,32 @@ class Api {
       datas = (response.data as List).map((e) => Datas.fromJson(e)).toList();
     }
     return datas;
+  }
+
+  Future<List<HotKeyModel>> getHotKeyList() async {
+    Response resp = await DioInstance.instance()
+        .get(path: 'hotkey/json', options: Options(method: HttpMethod.GET));
+    List<HotKeyModel> list = [];
+    if (resp.data is List) {
+      for (var item in resp.data) {
+        list.add(HotKeyModel.fromJson(item));
+      }
+    }
+
+    String methodNameStr = StackTrace.current.toString().split('\n')[0].trim();
+    print('$methodNameStr result 是:${list.toString()}');
+
+    return list;
+  }
+
+  Future<List<HotFriendModel>> getFriendsList() async {
+    Response resp = await DioInstance.instance()
+        .get(path: 'friend/json', options: Options(method: HttpMethod.GET));
+
+    List<HotFriendModel> list = [];
+    for (var item in resp.data) {
+      list.add(HotFriendModel.fromJson(item));
+    }
+    return list;
   }
 }

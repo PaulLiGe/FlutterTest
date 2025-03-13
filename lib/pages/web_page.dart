@@ -3,7 +3,8 @@ import 'package:flutter/src/widgets/routes.dart';
 
 class WebViewPage extends StatefulWidget {
   String? title;
-  WebViewPage({super.key, this.title});
+  final String url;
+  WebViewPage({super.key, this.title, required this.url});
 
   @override
   State<StatefulWidget> createState() => _WebViewPageState();

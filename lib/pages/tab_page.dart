@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test01/pages/home_page_1.dart';
+import './hot_key/hot_key_page.dart';
 import 'package:test01/pages/homepage.dart';
 import 'package:test01/pages/hot_page.dart';
-import 'package:test01/pages/my_page.dart';
+import '../pages/my/my_page.dart';
 
 class TabPage extends StatefulWidget {
   const TabPage({super.key});
@@ -35,11 +35,11 @@ class _TabPageState extends State<TabPage> {
 
   List<BottomNavigationBarItem> _bottomTabBarItems() {
     final item1 = BottomNavigationBarItem(
-      label: '首页',
-      icon: Icon(
-        Icons.message,
-      ),
-    );
+        label: '首页',
+        icon: Icon(
+          Icons.message,
+        ),
+        backgroundColor: Colors.purple);
     final item2 = BottomNavigationBarItem(
         label: '副页',
         icon: Icon(
@@ -50,10 +50,13 @@ class _TabPageState extends State<TabPage> {
         icon: Icon(
           Icons.hot_tub,
         ));
-    return [item1, item2, item3];
+    final item4 =
+        BottomNavigationBarItem(label: '我的', icon: Icon(Icons.my_library_add));
+
+    return [item1, item2, item3, item4];
   }
 
   List<Widget> _tabPages() {
-    return [HomePage(), HomePage1(), HotPage(), MyPage()];
+    return [HomePage(), HotKeyPage(), HotPage(), MyPage()];
   }
 }

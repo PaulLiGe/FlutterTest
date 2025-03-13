@@ -8,7 +8,12 @@ class Routes {
       case RoutePath.home:
         return pageRoute(HomePage(), settings: settings);
       case RoutePath.webViewPage:
-        return pageRoute(WebViewPage(title: "title"), settings: settings);
+        return pageRoute(
+            WebViewPage(
+              title: "title",
+              url: "",
+            ),
+            settings: settings);
     }
     return pageRoute(Scaffold(
       body: SafeArea(
